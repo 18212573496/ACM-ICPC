@@ -1,0 +1,33 @@
+线段树：
+1: 建树；
+#define lson x<<1                        //左儿子
+#define rson (x<<1)+1                     //右儿子
+void creat(int x, int l, int r)          //x为节点，l为左范围, r为右范围；
+{
+    if(r>l) return ;                     //当l>r时，查无此点；也许可以在creat前面加判断；
+    if(l==r) {tree[x]=a[l];return ;}     //找到此点，插入a[]点；
+    int mid=(l+r)/2;                     
+    creat(lson, l, mid);
+    creat(rson,mid+1,r);
+    tree[x] = tree[lson] + tree[rson];   
+}
+2: 查询某个点；
+void Query(int x, int L, int R, int l, int r)//大写AB对应LR不用改变；
+{
+    if(l==L&&r==R) return tree[x];         //查询到此点；返回此点；
+    int mid=(r+l)/2;
+    int a=0,b=0;
+    if(L<=mid) a=Query(lson,L,R,l,mid);
+    if(L>=mid+1) b=Query(rson,L,R,mid+1,r);
+    tree[x]=tree[lson]+tree[rson];
+}
+3：更新某个点；
+void Update（int x,int w, int val,int l,int r）//把改变范围放在后面
+{
+    if(l>=L&&r<=R) {tree=n;return ;}
+    int mid=(l+r)/2;
+    if(w<=mid) upd(lson, w, val, l, mid);
+    if(w> mid) upd(rson, w, val, mid+1, r);
+    tree[x] = max(tree[lson] + tree[rson]);
+}
+
